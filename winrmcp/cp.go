@@ -144,7 +144,7 @@ func restoreContent(client *winrm.Client, fromPath, toPath string) error {
 				$writer.Close()
 			}
 		} else {
-			echo $null > $dest_file_path
+			out-file -FilePath $dest_file_path -Encoding utf8 -InputObject $null
 		}
 	`, fromPath, toPath)
 
@@ -213,7 +213,7 @@ func cleanupContent(client *winrm.Client, filePath string) error {
 }
 
 func appendContent(shell *winrm.Shell, filePath, content string) error {
-	cmd, err := shell.Execute(fmt.Sprintf("echo %s >> \"%s\"", content, filePath))
+	cmd, err := shell.Execute(fmt.Sprintf("out-file -FilePath \"%s\" -encoding utf8 -Append -InputObject \"%s\"", content, filePath))
 
 	if err != nil {
 		return err
